@@ -1,0 +1,15 @@
+extends layout
+
+block content
+
+  form(action="/" )
+    input(
+      type='submit'
+      value='return'
+    )
+  
+  h1= message
+  h2= error.status
+  pre #{error.stack}
+
+  

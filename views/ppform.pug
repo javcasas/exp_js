@@ -1,0 +1,33 @@
+extends layout
+
+block content
+
+    h1 Pico y placa
+
+    form(action="/demo" method="POST")
+        p Ingreso de parametros
+        label Placa
+        br
+        input(id="pin" type="text" name="placaIn")
+        input(
+            type='submit'
+            value='RUN!'
+        )
+    
+    p placa: #{placaver}
+
+    form(action="/processform", method="post")
+        label Correo
+        br
+        input(type="text" name="email")
+        br
+        label Comentario
+        br
+        input(type="text" name="coment")
+
+        button(type="submit") Enviar
+
+    
+    p email a:  #{emailarm} !!
+
+    a(href="/views/#{post.id}")
