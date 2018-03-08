@@ -2,10 +2,20 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title} !!
+  p Bienvenido a #{title} !!
 
-  form(action="/mainpp" )
-    input(
+  h3 Practica de Nodejs, Expressjs, JS, Promesas, Sequelize.
+
+  form(method='post')
+    label Test pico y placa  
+    button(
       type='submit'
-      value='RUN!'
-    )
+      formaction="/mainpp"
+    ) OK
+    br
+    label Test comentarios 
+    button(
+      type='submit'
+      formaction="/mainpp"
+    ) OK
+

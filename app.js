@@ -16,6 +16,7 @@ const users = require('./routes/users');
 const picoyplaca = require('./public/javascripts/validador/validadorPlaca')
 const router = express.Router();
 const timeout = require('connect-timeout');
+const testbdd = require('./public/javascripts/control/bddcon');
 //
 
 const app = express();
@@ -35,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //pico y placa 
 app.use(timeout(1000)); //1 segundo
 app.use('/validador',picoyplaca);
+app.use('/testbdd', testbdd);
 
 app.use('/demo', function (req, res, next) {
   console.log('from form...')
