@@ -15,7 +15,7 @@ const users = require('./routes/users');
 const picoyplaca = require('./public/javascripts/validador/validadorPlaca');
 const router = express.Router();
 const timeout = require('connect-timeout');
-const testbdd = require('./public/javascripts/control/bddconn');
+//const testbdd = require('./public/javascripts/control/bddconn');
 const comentario = require('./public/javascripts/validador/validadorComentario');
 //
 
@@ -33,6 +33,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/', index);
+app.use('/users', users);
+
 //practica:
 //pico y placa form
 app.use('/ppdemo', function(req, res, next){
@@ -49,12 +52,6 @@ app.use('/comdemo', function(req, res, next){
 app.use('/validarpp',picoyplaca);
 //desde form com a control
 app.use('/processform', comentario);
-
-app.use('/testbdd', testbdd);
-//
-
-app.use('/', index);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

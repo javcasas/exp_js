@@ -6,6 +6,8 @@
 const express = require("express");
 const router = express.Router();
 
+const testbdd = require('../control/bddconn');
+
 router.get("/", function(req, res, next){
     const ppIn = req.query.placaIn;
     console.log(req.query.placaIn);
