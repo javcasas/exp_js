@@ -1,0 +1,23 @@
+extends layout
+
+block content
+
+    h1 Comentarios
+
+    form(method="get")
+        label Correo
+        br
+        input(type="text" name="email")
+        br
+        label Comentario
+        br
+        input(type="text" name="coment")
+
+        button(
+            type="submit"
+            formaction="/processform") Enviar
+
+    
+    p email a:  #{emailarm} !!
+
+    a(href='http://localhost:3000/') Regreso a: Inicio

@@ -1,34 +1,33 @@
-/*
-function validarPlaca(placaIn){
-    var control = true;
-    console.log("validar placa...")
+//Uso de promesas - practica
+//validar pp
 
-    //la longitud de la placa debe ser 8
-    if(placaIn.length !== 8){
-        control = false;
-    }
-    //verificar el patron
+'use strict';
 
-    return control;
-}*/
-
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
 router.get("/", function(req, res, next){
+    const ppIn = req.query.placaIn;
+    console.log(req.query.placaIn);
     let promesa1 = new Promise((resolve, reject)=>{
         setTimeout(function(){
             resolve("Success!");
-        },5000);
+        },1000);
     });
-
-    console.log("Redir despues de 5 sec..");
+    
+    console.log("Redir despues de 1 sec..");
 
     promesa1.then((successMessage)=> {
-        res.render('ppform');
+        if(ppIn.length !== 8){
+            const err = new Error('Error de longitud');
+            err.status = 400;
+            next(err);
+        } else{
+            res.locals.placaver = 'A: '+ ppIn;
+            res.render('ppform');
+        };
         console.log("Yay! "+successMessage);
     });
 });
 
 module.exports = router;
-

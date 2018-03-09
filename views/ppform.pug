@@ -4,30 +4,16 @@ block content
 
     h1 Pico y placa
 
-    form(action="/demo" method="POST")
+    form(method="get")
         p Ingreso de parametros
         label Placa
         br
         input(id="pin" type="text" name="placaIn")
-        input(
+        button(
             type='submit'
-            value='RUN!'
-        )
+            formaction="/validarpp"
+        ) validar
     
     p placa: #{placaver}
 
-    form(action="/processform", method="post")
-        label Correo
-        br
-        input(type="text" name="email")
-        br
-        label Comentario
-        br
-        input(type="text" name="coment")
-
-        button(type="submit") Enviar
-
-    
-    p email a:  #{emailarm} !!
-
-    a(href="/views/#{post.id}")
+    a(href='http://localhost:3000/') Regreso a: Inicio

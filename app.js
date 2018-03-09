@@ -1,7 +1,6 @@
 'use strict'; //necesario siempre para evitar Hoisting
 
 //buena practica => cambiar los var por const o let (let se puede mutar)
-
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -13,10 +12,11 @@ const index = require('./routes/index');
 const users = require('./routes/users');
 
 //practica
-const picoyplaca = require('./public/javascripts/validador/validadorPlaca')
+const picoyplaca = require('./public/javascripts/validador/validadorPlaca');
 const router = express.Router();
 const timeout = require('connect-timeout');
-const testbdd = require('./public/javascripts/control/bddcon');
+const testbdd = require('./public/javascripts/control/bddconn');
+const comentario = require('./public/javascripts/validador/validadorComentario');
 //
 
 const app = express();
@@ -33,52 +33,24 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//pico y placa 
-app.use(timeout(1000)); //1 segundo
-app.use('/validador',picoyplaca);
-app.use('/testbdd', testbdd);
-
-app.use('/demo', function (req, res, next) {
-  console.log('from form...')
-  const aux = req.body.placaIn;
-  if(aux.length !== 8){
-    const err = new Error('Error de longitud');
-    err.status = 400;
-    next(err);
-  } else{
-    console.log("else")
-    //res.sendFile(path.join(__dirname+'/views/main.html'));
-    res.locals.placaver = 'A: '+ req.body.placaIn;
-    res.render('ppform');
-    console.log('....');
-  }
-})
-
-app.use('/mainpp', function(req, res, next){
+//practica:
+//pico y placa form
+app.use('/ppdemo', function(req, res, next){
   console.log('Redireccion a:');
-  //res.sendFile(path.join(__dirname+'/views/main.html'));
   res.render('ppform');
 })
-
-app.post('/processform', function(req, res, next){
-  console.log('Form: '+ req.query.form);
-  console.log('Email:'+ req.body.email);
-  console.log('Comentario:' + req.body.coment);
-  //res.send('<p>some html</>'); //no es util ni necesario
-  res.locals.emailarm = 'CORREO:'+req.body.email;
-  res.render('ppform');
+//comentarios form
+app.use('/comdemo', function(req, res, next){
+  console.log('Redireccion a:');
+  res.render('comform');
 })
 
-router.get('/views/:id', function (req, res, next) {
-  let id = req.params.id;
-  Post.findById(id, function (err, post) {
-    if(err) {
-      next(err);
-    }
-    console.log(post);
-    return res.render("post", {post: post})
-  })
-})
+// desde form pp a validador
+app.use('/validarpp',picoyplaca);
+//desde form com a control
+app.use('/processform', comentario);
+
+app.use('/testbdd', testbdd);
 //
 
 app.use('/', index);

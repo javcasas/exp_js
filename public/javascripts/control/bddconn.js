@@ -20,7 +20,7 @@ sequelize.authenticate().then(() => {
 }).catch(err=> {
     console.error('No se puede conectar. ', err);
 });
-
+/*
 //definir entidad de dominio y persistirla contra la bdd
 const Info = sequelize.define('info', {
     dato:{
@@ -47,7 +47,7 @@ const info1 = Info.sync({
         numero:2,
         comentario:'comentario desde Express js'
     });
-});
+});*/
 
 router.get("/", function(req,res, next){
     console.log('BDD...');
