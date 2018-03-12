@@ -8,14 +8,12 @@ const router = express.Router();
 
 const testbdd = require('../control/bddconn');
 
-let valdiarLength = function(value){
-    console.log('valor validar: '+value);
+const isValidLength = function(value){
     return value.length !== 8;
 };
 
 router.get("/", function(req, res, next){
     const ppIn = req.query.placaIn;
-    console.log(req.query.placaIn);
 
     let promesa1 = new Promise((resolve, reject)=>{
         setTimeout(function(){
@@ -23,10 +21,8 @@ router.get("/", function(req, res, next){
         },1000);
     });
     
-    console.log("Redir despues de 1 sec..");
-
     promesa1.then((successMessage)=> {
-        if (valdiarLength(ppIn)){
+        if (isValidLength(ppIn)){
             const err = new Error('Error de longitud');
             err.status = 400;
             next(err);
@@ -34,7 +30,6 @@ router.get("/", function(req, res, next){
             res.locals.placaver = 'A: '+ppIn;
             res.render('ppform');
         }
-        console.log("Yay! "+successMessage);
     });
 });
 
