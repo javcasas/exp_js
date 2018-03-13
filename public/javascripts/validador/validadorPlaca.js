@@ -6,11 +6,24 @@
 const express = require("express");
 const router = express.Router();
 
-const testbdd = require('../control/bddconn');
+const db = require('../connector/bddconn'),
+    sequelize = db.sequelize,
+    Sequelize = db.Sequelize;
+
+const Info = require('../model/Info');
 
 const isValidLength = function(value){
     return value.length !== 8;
 };
+
+const processPromObj = function(value, res){
+    console.log('Intento: '+value);
+    value.then((info) => {
+        console.log('num: '+info.dato);
+        res.locals.placaver = info.dato;
+        res.render('ppform');
+    });
+}
 
 router.get("/", function(req, res, next){
     const ppIn = req.query.placaIn;
@@ -21,14 +34,13 @@ router.get("/", function(req, res, next){
         },1000);
     });
     
-    promesa1.then((successMessage)=> {
+    promesa1.then((successInfoMessage)=> {
         if (isValidLength(ppIn)){
             const err = new Error('Error de longitud');
             err.status = 400;
             next(err);
         } else {
-            res.locals.placaver = 'A: '+ppIn;
-            res.render('ppform');
+            processPromObj(Info(1), res);            
         }
     });
 });
