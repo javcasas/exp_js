@@ -17,7 +17,7 @@ const Info = sequelize.define('info', {
         //getters
         getterMethods: {
             fullInfo: function () {
-                return this.dato+' '+comentario;
+                return this.correo+' '+this.comentario;
             }
         },
     }

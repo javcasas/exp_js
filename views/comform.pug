@@ -18,6 +18,11 @@ block content
             formaction="/processform") Enviar
 
     
+    ul 
+        each val in comments
+            li= "Email: " + val.dataValues.correo + " " + "Comment:" + val.dataValues.comentario
+
+    
     p Info:  #{emailarm}
 
     a(href='http://localhost:3000/') Regreso a: Inicio

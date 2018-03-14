@@ -9,8 +9,11 @@ const {searchInfo, Info} = require('../model/Info');
 
 //methods
 function createComment (req, res, next) {
-    const email = req.query.email
-    const comment = req.query.coment
+    const email = req.query.email;
+    const comment = req.query.coment;
+
+    res.locals.comments = [];
+
     if (email === undefined || email === "") {
         res.locals.emailarm = 'Email no provisto';
         res.render('comform');
@@ -27,9 +30,17 @@ function createComment (req, res, next) {
     const newComment = Info.create({
         correo: email,
         comentario: comment
-    }).then(() => {
-        console.log("Comment created")
-        res.render('comform')
+    }).then(comment => console.log("This is my comment:", JSON.stringify(comment))
+    ).then(() => console.log("Comment created")
+    ).then(() => {
+        Info.all()
+            .then(comments => {
+                console.log("Data VAlues:", comments[0].dataValues)
+                console.log("Email Attribute:", comments[0].email)
+                console.log(JSON.stringify(comments))
+                res.locals.comments = comments
+                res.render('comform')
+            })
     })
 
 
