@@ -27,7 +27,7 @@ const Info = sequelize.define('info', {
 function searchInfoByNum(num) {
     return Info
         .findOne({ 
-            where: {numero: num}
+            where: {id: num}
          })
         .catch((err) => {
             return console.error('Error searchInfoByNum: ',err);

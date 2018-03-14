@@ -43,7 +43,9 @@ app.use('/ppdemo', function(req, res, next){
 })
 //comentarios form
 app.use('/comdemo', function(req, res, next){
-  res.render('comform');
+  console.log('redirigiendo a : /conmform')
+  const algo = [{correo: 'a', comentario:'b'}, {correo: 'c', comentario:'d'}]
+  res.render('comform', {comments: algo});
 })
 
 // desde form pp a validador

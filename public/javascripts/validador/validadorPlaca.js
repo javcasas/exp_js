@@ -5,7 +5,7 @@
 
 const express = require("express");
 const router = express.Router();
-const searchInfo = require('../model/Info');
+const { searchInfoByNum, Info } = require('../model/Info');
 
 //methods
 const promise = new Promise((resolve, reject) => {
@@ -20,7 +20,7 @@ const isValidLength = function (value) {
 
 const processPromObj = function (value, res) {
     value.then((info) => {
-        res.locals.placaver = info.dato;
+        res.locals.placaver = info.comentario;
         res.render('ppform');
     })
     .catch((err) => {
@@ -38,7 +38,7 @@ router.get("/", function (req, res, next) {
         err.status = 400;
         next(err);
     } else {
-        processPromObj(searchInfo(1), res);
+        processPromObj(searchInfoByNum(1), res);
     }
 });
 
