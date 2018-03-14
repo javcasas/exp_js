@@ -16,6 +16,6 @@ const sequelize = new Sequelize('postgres', 'postgres', '', {
 });
 
 module.exports = {
-    sq: sequelize,
-    SQ: Sequelize
+    sequelize,
+    Sequelize
 };

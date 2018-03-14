@@ -1,15 +1,12 @@
 'use strict';
 
-const db = require('../connector/bddconn'),
-    sq = db.sq,
-    Sequelize = db.SQ;
+const {sequelize, Sequelize} = require('../connector/bddconn');
 
 const Op = Sequelize.Op;
 
 //model
-const Info = sq.define('info', {
-    dato: Sequelize.TEXT,
-    numero: Sequelize.INTEGER,
+const Info = sequelize.define('info', {
+    correo: Sequelize.TEXT,
     comentario: Sequelize.TEXT
 }, {
         //config:
@@ -19,25 +16,25 @@ const Info = sq.define('info', {
 
         //getters
         getterMethods: {
-            metodo1: function () {
-                return '12345';
+            fullInfo: function () {
+                return this.dato+' '+comentario;
             }
         },
     }
 );
 
 //methods
-function consulta(num) {
+function searchInfoByNum(num) {
     return Info
         .findOne({ 
             where: {numero: num}
          })
-        .then((info) => {
-            return info;
-        })
         .catch((err) => {
-            return console.error(err);
+            return console.error('Error searchInfoByNum: ',err);
         });
 };
 
-module.exports = consulta;
+module.exports = {
+    searchInfoByNum,
+    Info
+};

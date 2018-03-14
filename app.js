@@ -39,12 +39,10 @@ app.use('/users', users);
 //practica:
 //pico y placa form
 app.use('/ppdemo', function(req, res, next){
-  console.log('Redireccion a:');
   res.render('ppform');
 })
 //comentarios form
 app.use('/comdemo', function(req, res, next){
-  console.log('Redireccion a:');
   res.render('comform');
 })
 
@@ -55,7 +53,7 @@ app.use('/processform', comentario);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  let err = new Error('Not Found');
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
