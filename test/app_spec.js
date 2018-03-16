@@ -6,8 +6,16 @@ const app = require('../app');
 
 const expect = chai.expect;
 
-chai.use(chaiHttp);
+const assert = chai.assert;
 
+const { routerComentario, isEmpty, validateNonEmpty } = require('../public/javascripts/validador/validadorComentario');
+
+const chaiAsPromised = require("chai-as-promised");
+
+chai.use(chaiAsPromised);
+
+//Route testers
+/*
 //test: opcion pico y placa
 describe('App pico y placa test', function () {
     describe('/ppdemo', function () {
@@ -75,5 +83,34 @@ describe('App formcom test', function () {
                     done();
                 });
         });
+    });
+});*/
+
+//Function testers
+describe('validadorComentario - isEmpty function', function () {
+    it('when is empty', function (done) {
+        expect(isEmpty()).to.be.true;
+        done();
+    });
+    it('when is \'\' ', function (done) {
+        expect(isEmpty('')).to.be.true;
+        done();
+    })
+    it('otherwise', function (done) {
+        expect(isEmpty('test')).to.be.false;
+        done();
+    })
+});
+
+describe('validadorComentario - validateNonEmpty function', function () {
+    it('resolves as promised', function() {
+        return expect(validateNonEmpty('', 'error'))
+            .to.eventually.be.rejectedWith('Fail');
+    });
+    it('resolves as promised', function() {
+        /*return expect(validateNonEmpty('test', 'error')).to.eventually.be.fulfilled.then(x => {   
+        });*/ //para validar si el promise es un objeto, valida lo interno: ejmplo: un campo field = null
+        return expect(validateNonEmpty('test', 'mensaje'))
+            .to.eventually.be.equal();
     });
 });

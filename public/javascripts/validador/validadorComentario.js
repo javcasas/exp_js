@@ -3,55 +3,71 @@
 'use strict'
 
 const express = require("express");
-const router = express.Router();
+const routerComentario = express.Router();
+const routerComentarioDelete = express.Router();
 
 const { searchInfo, Info } = require('../model/Info');
+
+let msgError;
+
+const promise = new Promise((resolve, reject) => resolve());
 
 //methods
 function isEmpty(x) {
     return (x === undefined || x === "")
-}
+};
 
-function validateNonEmpty(variable, errorMessage, res) {
+function validateNonEmpty(variable, errorMessage) {
     return new Promise((fullfill, reject) => {
         if (isEmpty(variable)) {
-            res.locals.emailarm = errorMessage;
-            res.locals.comments = [];
             //return reject(new Error('Fail:')) buena practica
-            return reject('Fail');
+            msgError = errorMessage
+            return reject('Fail',errorMessage);
         } else {
             return fullfill()
         }
     })
-}
+};
 
 function createComment(req, res, next) {
     const email = req.query.email;
     const comment = req.query.coment;
 
-    res.locals.comments = [];
-
-    new Promise((fullfill, reject) => fullfill())
-        .then(() => console.log("Started"))
-        .then(() => validateNonEmpty(email, "Email no provisto", res)) // Validar email
-        .then(() => validateNonEmpty(comment, "Comentario no provisto", res))  // Validar comentario
-        .then(() => Info.create({
+    promise
+        .then(() => console.log('Started'))
+        .then(() => validateNonEmpty(email, "Email no provisto")) // Validar email
+        .then(() => validateNonEmpty(comment, "Comentario no provisto"))  // Validar comentario
+        /*.then(() => Info.create({
             correo: email,
             comentario: comment
-        }))  // Insertar en la BBDD
-        .then(() => Info.all())  // Traer todos los comentarios de la BBDD
+        })) */ // Insertar en la BBDD
+        .then(() => Info.findAll({
+            order: ['id'] //order fields
+        }))  // Traer todos los comentarios de la BBDD
         .then(comments => {
             res.locals.comments = comments
             res.render('comform')
         })
         .catch((err) => {
             res.locals.comments = [];
+            res.locals.emailarm = msgError;
             res.render('comform');
             console.error("something went wrong: ", err) // Algo fallo
         })
 }
 
-//route
-router.get("/", createComment);
+function deleteComment(res, idToDelete) {
+    console.log('Delete: '+idToDelete);
+    const algo = [{correo: 'a', comentario:'b'}, {correo: 'c', comentario:'d'}]
+    res.render('comform', {comments: algo});
+}
 
-module.exports = router;
+//route
+routerComentario.get("/", createComment);
+
+module.exports = {
+    routerComentario,
+    isEmpty,
+    validateNonEmpty,
+    deleteComment
+};

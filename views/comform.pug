@@ -15,12 +15,19 @@ block content
 
         button(
             type="submit"
-            formaction="/processform") Enviar
+            formaction="/processform/create") Enviar
+        
+    form(method="post")
+        ul 
+            each val in comments
+                li= "Id: "+ val.id + "Email: " + val.correo + " " + "Comment:" + val.comentario
+                button(
+                    
+                    type="submit"
+                    formaction="/delete?id="+val.id) delete
 
     
-    ul 
-        each val in comments
-            li= "Email: " + val.correo + " " + "Comment:" + val.comentario
+    
 
     
     p Info:  #{emailarm}

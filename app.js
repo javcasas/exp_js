@@ -16,7 +16,8 @@ const picoyplaca = require('./public/javascripts/validador/validadorPlaca');
 const router = express.Router();
 const timeout = require('connect-timeout');
 //const testbdd = require('./public/javascripts/control/bddconn');
-const comentario = require('./public/javascripts/validador/validadorComentario');
+//const comentario = require('./public/javascripts/validador/validadorComentario');
+const {routerComentario, isEmpty, validateNoEmpty, deleteComment} = require('./public/javascripts/validador/validadorComentario')
 //
 
 const app = express();
@@ -43,15 +44,18 @@ app.use('/ppdemo', function(req, res, next){
 })
 //comentarios form
 app.use('/comdemo', function(req, res, next){
-  console.log('redirigiendo a : /conmform')
-  const algo = [{correo: 'a', comentario:'b'}, {correo: 'c', comentario:'d'}]
+  const algo = [{correo: '', comentario:''}]
   res.render('comform', {comments: algo});
 })
 
 // desde form pp a validador
 app.use('/validarpp',picoyplaca);
 //desde form com a control
-app.use('/processform', comentario);
+app.use('/processform/create', routerComentario);
+app.use('/delete', function(req, res, next){
+  const idToDelete = req.query.id;
+  deleteComment(res, idToDelete);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
