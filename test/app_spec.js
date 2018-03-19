@@ -17,11 +17,6 @@ chai.use(chaiAsPromised);
 //Function testers
 describe('validadorComentario: ', function () {
     describe('validate function', function () {
-        /*it('resolve promise', function () {
-            return expect(validate('email', 'comentario'))
-                .to.eventually.be.equal(undefined);
-        });*/
-
         it('reject promise - without email', function () {
             return expect(validate(undefined, 'comentario'))
                 .to.eventually.be.rejectedWith('Email no provisto');

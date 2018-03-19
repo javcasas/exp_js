@@ -111,7 +111,6 @@ function updateComment(res, idToUpdate) {
 }
     //update promise
 function saveUpdatedComment(req, res, next) {
-    //return new Promise((resolve, reject) => resolve())
     validate(req.query.email, req.query.coment)
         .then(() => Info.update({
             correo: req.query.email,
