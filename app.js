@@ -1,6 +1,6 @@
 'use strict'; //necesario siempre para evitar Hoisting
 
-//buena practica => cambiar los var por const o let (let se puede mutar)
+//buena practica => cambiar los var por const o let (let --> puede mutar)
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -15,8 +15,7 @@ const users = require('./routes/users');
 const picoyplaca = require('./public/javascripts/validador/validadorPlaca');
 const router = express.Router();
 const timeout = require('connect-timeout');
-//const testbdd = require('./public/javascripts/control/bddconn');
-const comentario = require('./public/javascripts/validador/validadorComentario');
+const {routerComentario, isEmpty, createComment, readComment, deleteComment, updateComment, saveUpdatedComment} = require('./public/javascripts/validador/validadorComentario')
 //
 
 const app = express();
@@ -39,23 +38,33 @@ app.use('/users', users);
 //practica:
 //pico y placa form
 app.use('/ppdemo', function(req, res, next){
-  console.log('Redireccion a:');
   res.render('ppform');
 })
 //comentarios form
 app.use('/comdemo', function(req, res, next){
-  console.log('Redireccion a:');
-  res.render('comform');
+  const algo = [{correo: '', comentario:''}]
+  res.render('comform', {comments: algo});
 })
 
-// desde form pp a validador
+// picoyplaca logic
 app.use('/validarpp',picoyplaca);
-//desde form com a control
-app.use('/processform', comentario);
+
+//comments logic 
+app.use('/processform/create', routerComentario);
+app.use('/delete', function(req, res, next){
+  deleteComment(res, req.query.id);
+});
+app.use('/update', function(req, res, next){
+  updateComment(res, req.query.id);
+});
+app.use('/readcomments', function(req, res, next){
+  readComment(req, res, next);
+});
+app.use('/processform/update', saveUpdatedComment);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  let err = new Error('Not Found');
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });

@@ -5,32 +5,41 @@
 
 const express = require("express");
 const router = express.Router();
+const { searchInfoByNum, Info } = require('../model/Info');
 
-const testbdd = require('../control/bddconn');
+//methods
+const promise = new Promise((resolve, reject) => {
+    setTimeout(function () {
+        resolve("Success!");
+    }, 1000);
+});
 
-const isValidLength = function(value){
+const isValidLength = function (value) {
     return value.length !== 8;
 };
 
-router.get("/", function(req, res, next){
-    const ppIn = req.query.placaIn;
+const processPromObj = function (value, res) {
+    value.then((info) => {
+        res.locals.placaver = info.comentario;
+        res.render('ppform');
+    })
+    .catch((err) => {
+        res.locals.placaver = 'ERROR DE DATO';
+        res.render('ppform');
+        return console.error('Err2: ', err);
+    });;
+}
 
-    let promesa1 = new Promise((resolve, reject)=>{
-        setTimeout(function(){
-            resolve("Success!");
-        },1000);
-    });
-    
-    promesa1.then((successMessage)=> {
-        if (isValidLength(ppIn)){
-            const err = new Error('Error de longitud');
-            err.status = 400;
-            next(err);
-        } else {
-            res.locals.placaver = 'A: '+ppIn;
-            res.render('ppform');
-        }
-    });
+//route
+router.get("/", function (req, res, next) {
+    const ppIn = req.query.placaIn;
+    if (isValidLength(ppIn)) {
+        const err = new Error('Error de longitud');
+        err.status = 400;
+        next(err);
+    } else {
+        processPromObj(searchInfoByNum(1), res);
+    }
 });
 
 module.exports = router;

@@ -1,0 +1,25 @@
+extends layout
+
+block content
+
+    h1 Comentarios
+
+    a(href='http://localhost:3000/readcomments') Regresar
+    
+    form(method="get")
+        br
+        label Id
+        br
+        input(type="text" name="id" value=id readonly=true) 
+        br
+        label Correo
+        br
+        input(type="text" name="email" value=email)
+        br
+        label Comentario
+        br
+        input(type="text" name="coment" value=coment)
+        br
+        button(
+            type="submit"
+            formaction="/processform/update") Actualizar
