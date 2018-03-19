@@ -5,6 +5,11 @@ block content
     h1 Comentarios
 
     form(method="get")
+        button(
+            type="submit"
+            formaction="/readcomments") Cargar Comentarios
+        br
+        br
         label Correo
         br
         input(type="text" name="email")
@@ -12,19 +17,19 @@ block content
         label Comentario
         br
         input(type="text" name="coment")
-
+        br
         button(
             type="submit"
             formaction="/processform/create") Enviar
-        
+    br
+
     form(method="post")
         ul 
             each val in comments
                 li= "Id: "+ val.id + "Email: " + val.correo + " " + "Comment:" + val.comentario
                 button(
-                    
                     type="submit"
-                    formaction="/delete?id="+val.id) delete
+                    formaction="/delete?id="+val.id) Eliminar
 
     
     

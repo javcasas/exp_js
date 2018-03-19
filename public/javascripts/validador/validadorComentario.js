@@ -1,5 +1,4 @@
 //validar comentario
-
 'use strict'
 
 const express = require("express");
@@ -8,58 +7,90 @@ const routerComentarioDelete = express.Router();
 
 const { searchInfo, Info } = require('../model/Info');
 
-let msgError;
-
-const promise = new Promise((resolve, reject) => resolve());
-
 //methods
-function isEmpty(x) {
-    return (x === undefined || x === "")
-};
-
-function validateNonEmpty(variable, errorMessage) {
-    return new Promise((fullfill, reject) => {
-        if (isEmpty(variable)) {
-            //return reject(new Error('Fail:')) buena practica
-            msgError = errorMessage
-            return reject('Fail',errorMessage);
-        } else {
-            return fullfill()
+function validate(email, comentario) { //se puede probar
+    return new Promise((resolve, reject) => {
+        if (isEmpty(email)) {
+            return reject('Email no provisto');
         }
+        if (isEmpty(comentario)) {
+            return reject('Comentario no provisto');
+        }
+        resolve({
+            email,
+            comentario
+        });
     })
+}
+
+function renderPage(res, data) {//no se debe validar funciones que reciben res como param
+    return res.render('comform', {
+        "comments": data.comments,
+        "emailarm": data.emailarm
+    });
+}
+
+function isEmpty(x) {
+    return (x === undefined || x === "");
 };
 
+//create
 function createComment(req, res, next) {
-    const email = req.query.email;
-    const comment = req.query.coment;
-
-    promise
-        .then(() => console.log('Started'))
-        .then(() => validateNonEmpty(email, "Email no provisto")) // Validar email
-        .then(() => validateNonEmpty(comment, "Comentario no provisto"))  // Validar comentario
-        /*.then(() => Info.create({
-            correo: email,
-            comentario: comment
-        })) */ // Insertar en la BBDD
+    validate(req.query.email, req.query.coment)
+        .then((datos) => Info.create({
+            correo: datos.email,
+            comentario: datos.comentario
+        }))  // Insertar en la BBDD
         .then(() => Info.findAll({
             order: ['id'] //order fields
         }))  // Traer todos los comentarios de la BBDD
         .then(comments => {
-            res.locals.comments = comments
-            res.render('comform')
+            renderPage(res, {comments});
         })
         .catch((err) => {
-            res.locals.comments = [];
-            res.locals.emailarm = msgError;
-            res.render('comform');
             console.error("something went wrong: ", err) // Algo fallo
+            renderPage(res, {comments: [], emailarm:err});
+        });
+};
+
+//read
+function readComment(req, res, next) {
+    return new Promise((resolve, reject) => resolve())
+        .then(() => Info.findAll({
+            order: ['id'] //order fields
+        })) //Bring all comments from DB
+        .then(comments => {
+            renderPage(res, {comments});
         })
+        .catch((err) => {
+            console.error("something went wrong: ", err); // Algo fallo
+            renderPage(res, {comments: [], emailarm:err});
+        });
+};
+
+//delete
+function deleteComment(res, idToDelete) {
+    return new Promise((resolve, reject) => resolve())
+        .then(() => Info.destroy({
+            where: {
+                id: idToDelete
+            }
+        })) //delete selected comment from DB (based on Id selected)
+        .then(() => Info.findAll({
+            order: ['id'] //order fields
+        })) //Bring all comments from DB
+        .then(comments => {
+            renderPage(res, {comments, emailarm:'Eliminado: '+idToDelete});
+        })
+        .catch((err) => {
+            console.error("something went wrong: ", err); // Algo fallo
+            renderPage(res, {comments: [], emailarm:err});
+        });
 }
 
-function deleteComment(res, idToDelete) {
-    console.log('Delete: '+idToDelete);
-    const algo = [{correo: 'a', comentario:'b'}, {correo: 'c', comentario:'d'}]
-    res.render('comform', {comments: algo});
+//update
+function updateComment(){
+
 }
 
 //route
@@ -68,6 +99,9 @@ routerComentario.get("/", createComment);
 module.exports = {
     routerComentario,
     isEmpty,
-    validateNonEmpty,
-    deleteComment
+    validate,
+    createComment,
+    readComment,
+    deleteComment,
+    updateComment
 };
