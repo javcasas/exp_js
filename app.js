@@ -15,7 +15,7 @@ const users = require('./routes/users');
 const picoyplaca = require('./public/javascripts/validador/validadorPlaca');
 const router = express.Router();
 const timeout = require('connect-timeout');
-const {routerComentario, isEmpty, createComment, readComment, deleteComment, updateComment} = require('./public/javascripts/validador/validadorComentario')
+const {routerComentario, isEmpty, createComment, readComment, deleteComment, updateComment, saveUpdatedComment} = require('./public/javascripts/validador/validadorComentario')
 //
 
 const app = express();
@@ -54,9 +54,13 @@ app.use('/processform/create', routerComentario);
 app.use('/delete', function(req, res, next){
   deleteComment(res, req.query.id);
 });
+app.use('/update', function(req, res, next){
+  updateComment(res, req.query.id);
+});
 app.use('/readcomments', function(req, res, next){
   readComment(req, res, next);
 });
+app.use('/processform/update', saveUpdatedComment);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

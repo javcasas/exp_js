@@ -89,8 +89,48 @@ function deleteComment(res, idToDelete) {
 }
 
 //update
-function updateComment(){
-
+    //render the new form for do updates
+function updateComment(res, idToUpdate) {
+    return new Promise((resolve, reject) => resolve())
+        .then(() => Info.findOne({
+            where: {
+                id: idToUpdate
+            }
+        })) //find the one who will be updated
+        .then(row => {
+            console.log(row.id, row.comentario, row.correo);
+            res.render('updatecomform', {
+                id: row.id,
+                email: row.correo, 
+                coment: row.comentario});
+        })
+        .catch((err) => {
+            console.error("something went wrong: ", err); // Algo fallo
+            renderPage(res, {comments: [], emailarm:err});
+        });
+}
+    //update promise
+function saveUpdatedComment(req, res, next) {
+    //return new Promise((resolve, reject) => resolve())
+    validate(req.query.email, req.query.coment)
+        .then(() => Info.update({
+            correo: req.query.email,
+            comentario: req.query.coment
+        },{
+            where: {
+                id: req.query.id
+            }
+        })) //update selected comment from DB (based on Id selected)
+        .then(() => Info.findAll({
+            order: ['id'] //order fields
+        })) //Bring all comments from DB
+        .then(comments => {
+            renderPage(res, {comments, emailarm:'Informacion actualizada'});
+        })
+        .catch((err) => {
+            console.error("something went wrong: ", err); // Algo fallo
+            renderPage(res, {comments: [], emailarm:err});
+        });
 }
 
 //route
@@ -103,5 +143,6 @@ module.exports = {
     createComment,
     readComment,
     deleteComment,
-    updateComment
+    updateComment,
+    saveUpdatedComment
 };

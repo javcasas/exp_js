@@ -26,10 +26,13 @@ block content
     form(method="post")
         ul 
             each val in comments
-                li= "Id: "+ val.id + "Email: " + val.correo + " " + "Comment:" + val.comentario
+                li= "Id: "+ val.id + " - Email: " + val.correo + " - " + "Comment: " + val.comentario
                 button(
                     type="submit"
                     formaction="/delete?id="+val.id) Eliminar
+                button(
+                    type="submit"
+                    formaction="/update?id="+val.id) Actualizar
 
     
     
