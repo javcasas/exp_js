@@ -98,7 +98,6 @@ function updateComment(res, idToUpdate) {
             }
         })) //find the one who will be updated
         .then(row => {
-            console.log(row.id, row.comentario, row.correo);
             res.render('updatecomform', {
                 id: row.id,
                 email: row.correo, 

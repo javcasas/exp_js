@@ -8,7 +8,7 @@ const expect = chai.expect;
 
 const assert = chai.assert;
 
-const { routerComentario, isEmpty, validate } = require('../public/javascripts/validador/validadorComentario');
+const { routerComentario, isEmpty, validate } = require('../src/validador/validadorComentario');
 
 const chaiAsPromised = require("chai-as-promised");
 

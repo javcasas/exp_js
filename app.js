@@ -12,10 +12,10 @@ const index = require('./routes/index');
 const users = require('./routes/users');
 
 //practica
-const picoyplaca = require('./public/javascripts/validador/validadorPlaca');
+const picoyplaca = require('./src/validador/validadorPlaca');
 const router = express.Router();
 const timeout = require('connect-timeout');
-const {routerComentario, isEmpty, createComment, readComment, deleteComment, updateComment, saveUpdatedComment} = require('./public/javascripts/validador/validadorComentario')
+const {routerComentario, isEmpty, createComment, readComment, deleteComment, updateComment, saveUpdatedComment} = require('./src/validador/validadorComentario')
 //
 
 const app = express();
