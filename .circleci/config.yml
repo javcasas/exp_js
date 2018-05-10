@@ -43,6 +43,7 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
+      - run: ls
       - run: hap --version
 
 workflows:
