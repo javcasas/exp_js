@@ -45,6 +45,7 @@ jobs:
       - checkout
       - run: ls
       - run: hap --version
+      - run: ssh git@github.com
 
 workflows:
   version: 2
