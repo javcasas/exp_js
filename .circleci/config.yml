@@ -44,3 +44,10 @@ jobs:
     steps:
       - checkout
       - run: hap --version
+
+workflows:
+  version: 2
+    build_and_test:
+      jobs:
+        - build
+        - deploy
